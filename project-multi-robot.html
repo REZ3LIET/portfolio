@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent Multi-Robot Control - Samar Kale</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back-link {
+            color: #00d4ff;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .project-header {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+
+        .one-liner {
+            font-size: 1.2rem;
+            color: #b0b0b0;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-height: 400px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #00d4ff;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #2a2a2a;
+            padding-bottom: 10px;
+        }
+
+        p {
+            color: #b0b0b0;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        ul li {
+            color: #b0b0b0;
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        ul li:before {
+            content: "•";
+            color: #00d4ff;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .tech-stack {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .tech-badge {
+            background: #1a1a1a;
+            border: 1px solid #00d4ff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #00d4ff;
+        }
+
+        .links {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .links a {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #1a1a1a;
+            border: 1px solid #00d4ff;
+            color: #00d4ff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .links a:hover {
+            background: #00d4ff;
+            color: #0a0a0a;
+        }
+
+        .note {
+            background: #1a1a1a;
+            border-left: 3px solid #00d4ff;
+            padding: 15px 20px;
+            margin: 20px 0;
+            color: #888;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #666;
+            font-size: 0.85rem;
+            border-top: 1px solid #2a2a2a;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .one-liner {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Projects</a>
+        
+        <div class="project-header">
+            <h1>Multi-Agent Multi-Robot Control</h1>
+            <p class="one-liner">
+                LLM-driven task planning framework coordinating heterogeneous robot fleets through natural language commands
+            </p>
+        </div>
+
+        <div class="hero-image">
+            <!-- Replace this div with: <img src="path/to/diagram.png" alt="System Architecture" style="width: 100%; border-radius: 8px;"> -->
+            [Architecture Diagram / Demo GIF Here]
+        </div>
+
+        <section>
+            <h2>Overview</h2>
+            <p>
+                Led development of a multi-agent architecture enabling natural language control of robot fleets at Tata Elxsi. The system integrates LangChain with ROS2 to decompose high-level tasks into robot-specific actions, enabling non-technical operators to coordinate complex multi-robot workflows through conversational interfaces.
+            </p>
+            <p>
+                The system was validated across UR5 manipulators, Husky unmanned ground vehicles, and KUKA robotic arms in Isaac Sim, demonstrating scalable coordination and robust plan execution in both simulated and real-world environments.
+            </p>
+        </section>
+
+        <section>
+            <h2>The Problem</h2>
+            <p>
+                Traditional multi-robot systems require manual task allocation and hard-coded coordination logic. Scaling to heterogeneous fleets—where different robot types have different capabilities—becomes exponentially complex. Engineers must write custom code for each task variation, making rapid prototyping impossible.
+            </p>
+            <p>
+                Additionally, non-technical operators cannot interact with these systems, creating a bottleneck where only robotics experts can specify tasks.
+            </p>
+        </section>
+
+        <section>
+            <h2>Key Contributions</h2>
+            <ul>
+                <li>Architected LangChain-ROS2 bridge for agentic task allocation across heterogeneous fleets</li>
+                <li>Designed multi-agent coordination system using distributed decision-making</li>
+                <li>Validated system across multiple platforms: UR5 manipulator, 2× Husky UGVs, 4× KUKA arms</li>
+                <li>Migrated simulation environment from Gazebo to Isaac Sim for photorealistic testing</li>
+                <li>Scaled system from 2-robot prototype to 6+ unit deployment</li>
+                <li>Grew and mentored engineering team from 2 to 4 members</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Technical Approach</h2>
+            <p>
+                The system uses a hierarchical planning architecture where the LLM acts as a high-level task planner, decomposing natural language commands into structured sub-tasks. These sub-tasks are then allocated to individual robots based on their capabilities and current state.
+            </p>
+            <p>
+                <strong>Key technical decisions:</strong>
+            </p>
+            <ul>
+                <li>LangChain for flexible LLM integration and tool use</li>
+                <li>ROS2 for real-time robot control and message passing</li>
+                <li>Docker + gRPC for microservices architecture (decoupled perception, planning, execution)</li>
+                <li>Isaac Sim for high-fidelity simulation with realistic physics</li>
+            </ul>
+            <p>
+                The system implements robust failure recovery through dynamic replanning—when a robot fails to complete a subtask, the LLM regenerates the plan and reallocates work to available robots.
+            </p>
+        </section>
+
+        <section>
+            <h2>Results & Impact</h2>
+            <ul>
+                <li>Reduced task specification time from hours (manual programming) to seconds (natural language)</li>
+                <li>Successfully coordinated up to 7 robots simultaneously in simulation</li>
+                <li>Enabled non-technical operators to deploy complex multi-robot tasks</li>
+                <li>System demonstrated in both controlled environments and real-world scenarios</li>
+                <li>Architecture patterns reused across multiple robotics projects at Tata Elxsi</li>
+            </ul>
+            
+            <div class="note">
+                Note: Demo videos and detailed system architecture are proprietary and cannot be publicly shared. System deployed in production environment at Tata Elxsi.
+            </div>
+        </section>
+
+        <section>
+            <h2>Tech Stack</h2>
+            <div class="tech-stack">
+                <span class="tech-badge">Python</span>
+                <span class="tech-badge">LangChain</span>
+                <span class="tech-badge">ROS2</span>
+                <span class="tech-badge">Isaac Sim</span>
+                <span class="tech-badge">Docker</span>
+                <span class="tech-badge">gRPC</span>
+                <span class="tech-badge">GPT-4</span>
+            </div>
+        </section>
+
+        <section>
+            <h2>Related Projects</h2>
+            <p>This work builds on and connects to:</p>
+            <ul>
+                <li><a href="project-irex.html" style="color: #00d4ff;">LLM + Behavior Tree System (IREX 2023)</a> - Single-robot workflow automation</li>
+                <li><a href="project-causal.html" style="color: #00d4ff;">Causal Reasoning Research</a> - Improving robustness through causal inference</li>
+                <li><a href="project-simulator.html" style="color: #00d4ff;">LLM-Driven Robot Simulator</a> - Making LLM planning transparent</li>
+            </ul>
+        </section>
+
+        <div class="links">
+            <a href="index.html">← Back to Projects</a>
+            <!-- Add these when available:
+            <a href="path/to/github" target="_blank">View Code</a>
+            <a href="path/to/blog" target="_blank">Read Blog Post</a>
+            -->
+        </div>
+
+        <footer>
+            © 2025 Samar Kale
+        </footer>
+    </div>
+</body>
+</html>

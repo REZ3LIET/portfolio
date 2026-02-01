@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experience - Samar Kale</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back-link {
+            color: #00d4ff;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #00d4ff;
+            margin-bottom: 40px;
+        }
+
+        .experience-block {
+            background: #1a1a1a;
+            border-left: 3px solid #00d4ff;
+            padding: 30px;
+            margin-bottom: 40px;
+            border-radius: 4px;
+        }
+
+        .company-header {
+            margin-bottom: 25px;
+            border-bottom: 1px solid #2a2a2a;
+            padding-bottom: 15px;
+        }
+
+        .company-name {
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .company-location {
+            color: #888;
+            font-size: 0.95rem;
+        }
+
+        .role-section {
+            margin-bottom: 30px;
+        }
+
+        .role-title {
+            font-size: 1.3rem;
+            color: #00d4ff;
+            margin-bottom: 5px;
+        }
+
+        .role-period {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .role-description {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .achievements {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .achievements li {
+            color: #b0b0b0;
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .achievements li:before {
+            content: "→";
+            color: #00d4ff;
+            position: absolute;
+            left: 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #666;
+            font-size: 0.85rem;
+            border-top: 1px solid #2a2a2a;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .company-name {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Home</a>
+        
+        <h1>Experience</h1>
+
+        <div class="experience-block">
+            <div class="company-header">
+                <div class="company-name">Tata Elxsi</div>
+                <div class="company-location">Bengaluru, India | Aug 2021 - May 2025</div>
+            </div>
+
+            <div class="role-section">
+                <div class="role-title">Senior Engineer</div>
+                <div class="role-period">Aug 2024 - May 2025 (9 months)</div>
+                <div class="role-description">
+                    Led advanced AI research initiatives and scaled multi-robot coordination systems.
+                </div>
+                <ul class="achievements">
+                    <li>Led development of an LLM-driven multi-robot task-planning framework, growing the team from 2→4 engineers while mentoring interns and new hires. Architected LangChain–ROS2 integration enabling agentic task allocation across heterogeneous fleets (UR5, Husky, KUKA platforms).</li>
+                    <li>Validated the system across multiple hardware platforms—starting with UR5 + 2×Husky, scaling to 4×KUKA + 2-3×Husky in Isaac Sim. Demonstrated robust coordination and plan execution in both simulation and real-world environments, proving system scalability.</li>
+                    <li>Benchmarked 5-6 depth estimation models (MiDaS, ZoeDepth, etc.) and implemented ONNX quantization workflows, reducing inference overhead by ~40% to enable real-time perception pipelines for robotic navigation.</li>
+                    <li>Integrated ML inference modules into control and navigation subsystems using Docker and gRPC, creating modular microservices architecture that decoupled perception, planning, and execution for reliable production deployment.</li>
+                </ul>
+            </div>
+
+            <div class="role-section">
+                <div class="role-title">Engineer</div>
+                <div class="role-period">Jul 2022 - Aug 2024 (2 years 2 months)</div>
+                <div class="role-description">
+                    Built production-grade AI systems for robotic automation and workflow generation.
+                </div>
+                <ul class="achievements">
+                    <li>Built a GPT-guided Behavior Tree generation system using few-shot prompting and custom C++ execution wrappers. Automated UR3 task pipelines achieving 3-second user-to-robot execution latency. System was demonstrated publicly at IREX Japan 2023, showcasing real-time natural language to robot action translation.</li>
+                    <li>Designed computer vision data pipelines—preprocessing, augmentation, and evaluation workflows—to improve training robustness across depth estimation and segmentation models. Established best practices for dataset quality that reduced model retraining cycles.</li>
+                    <li>Built end-to-end agent architectures integrating retrieval, tool-use, self-reflection, and multi-step planning. Deployed pipelines that generated structured action plans executable by downstream robotic systems, bridging LLM reasoning with physical execution.</li>
+                    <li>Packaged perception and planning modules as containerized services using Docker, enabling version-controlled deployment and reliable integration with ROS2-style modular architectures.</li>
+                </ul>
+            </div>
+
+            <div class="role-section">
+                <div class="role-title">Project Trainee</div>
+                <div class="role-period">Aug 2021 - Jun 2022 (11 months)</div>
+                <div class="role-description">
+                    Developed foundational computer vision capabilities for autonomous ground robots.
+                </div>
+                <ul class="achievements">
+                    <li>Trained a U-Net segmentation model on a 1,200-image custom dataset for footpath detection, achieving 70% accuracy. Identified annotation inconsistencies through systematic error analysis, improving dataset quality and establishing labeling guidelines for future models.</li>
+                    <li>Integrated segmentation outputs into heuristic path-selection logic, enhancing route planning capabilities for autonomous ground robots navigating unstructured outdoor environments.</li>
+                    <li>Contributed to early ROS2 experiments combining perception, navigation, and control modules in both simulation and hardware testing loops, establishing integration patterns later used in production systems.</li>
+                    <li>Developed computer vision training pipelines including dataset generation, augmentation, and validation cycles for segmentation and depth-estimation models.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="experience-block">
+            <div class="company-header">
+                <div class="company-name">Worcester Polytechnic Institute</div>
+                <div class="company-location">Worcester, MA | Aug 2025 - Aug 2027 (Expected)</div>
+            </div>
+
+            <div class="role-section">
+                <div class="role-title">MS in Artificial Intelligence</div>
+                <div class="role-period">Aug 2025 - Aug 2027</div>
+                <div class="role-description">
+                    Pursuing graduate studies in artificial intelligence with focus on causal reasoning for LLM agents.
+                </div>
+                <ul class="achievements">
+                    <li>Research Focus: Investigating architectural modifications to enable causal reasoning in LLMs for robust robot task planning</li>
+                    <li>Coursework: Advanced topics in machine learning, computer vision, robotics, and AI systems</li>
+                    <li>Current exploration: How intervention operators can be integrated at the model level, similar to how attention mechanisms transformed transformer architectures</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            © 2025 Samar Kale
+        </footer>
+    </div>
+</body>
+</html>
