@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Musings — Samar Kale (REZ3LIET)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --bg-card: #111111;
+      --bg-card-hover: #161616;
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(255,255,255,0.18);
+      --text-primary: #f0f0f0;
+      --text-secondary: #888;
+      --text-muted: #555;
+      --accent: #7c6af7;
+      --accent-dim: rgba(124,106,247,0.12);
+      --accent-dim2: rgba(124,106,247,0.06);
+      --raw-color: #e8a44a;
+      --raw-dim: rgba(232,164,74,0.12);
+      --font: 'Inter', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text-primary); }
+    .nav-links a.active { color: var(--accent); }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 8rem 2rem 4rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .page-eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .page-title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 300;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+    .page-title em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .page-desc {
+      margin-top: 1.25rem;
+      color: var(--text-secondary);
+      font-size: 15px;
+      max-width: 520px;
+      line-height: 1.7;
+    }
+    .filter-row {
+      margin-top: 2rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 0.35rem 0.9rem;
+      border-radius: 2rem;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-family: var(--font);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { border-color: var(--border-hover); color: var(--text-primary); }
+    .filter-btn.active {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* CARD GRID */
+    .grid-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+    .musings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+    .musing-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.25s, background 0.25s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .musing-card:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+    .card-image {
+      width: 100%;
+      aspect-ratio: 16/7;
+      object-fit: cover;
+      display: block;
+      background: #1a1a1a;
+    }
+    .card-image-placeholder {
+      width: 100%;
+      aspect-ratio: 16/7;
+      background: linear-gradient(135deg, #111 0%, #1a1828 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-image-placeholder svg {
+      opacity: 0.15;
+      width: 32px; height: 32px;
+    }
+    .card-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .card-date {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    .card-tags { display: flex; gap: 0.35rem; margin-left: auto; }
+    .tag {
+      font-size: 11px;
+      padding: 0.15rem 0.55rem;
+      border-radius: 2rem;
+      background: var(--accent-dim2);
+      color: var(--accent);
+      border: 1px solid rgba(124,106,247,0.2);
+      font-family: var(--mono);
+    }
+    .card-title {
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.3;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.01em;
+    }
+    .card-preview {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      flex: 1;
+    }
+    .card-footer {
+      margin-top: 1.1rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .read-cta {
+      font-size: 13px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .read-cta svg { width:14px; height:14px; transition: transform 0.2s; }
+    .musing-card:hover .read-cta svg { transform: translateX(3px); }
+    .card-versions {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 5rem 1rem;
+      color: var(--text-muted);
+    }
+    .empty-state p { margin-top: 0.5rem; font-size: 14px; }
+
+    /* MODAL OVERLAY */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal {
+      background: #0f0f0f;
+      border: 1px solid var(--border-hover);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 720px;
+      margin: auto;
+      overflow: hidden;
+      transform: translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-backdrop.open .modal {
+      transform: translateY(0);
+    }
+    .modal-cover {
+      width: 100%;
+      aspect-ratio: 21/7;
+      object-fit: cover;
+      display: block;
+      background: #1a1828;
+    }
+    .modal-cover-placeholder {
+      width: 100%;
+      aspect-ratio: 21/7;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1828 50%, #0f0f0f 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-cover-placeholder svg { opacity: 0.1; width: 48px; height: 48px; }
+    .modal-inner { padding: 2rem 2.5rem 3rem; }
+    .modal-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+    }
+    .modal-close-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      transition: all 0.2s;
+    }
+    .modal-close-btn:hover {
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+    .toggle-group {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 2rem;
+      overflow: hidden;
+      background: var(--bg-card);
+    }
+    .toggle-btn {
+      padding: 0.35rem 1rem;
+      border: none;
+      background: transparent;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+    .toggle-btn.active-refined {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+    .toggle-btn.active-raw {
+      background: var(--raw-dim);
+      color: var(--raw-color);
+    }
+    .modal-title {
+      font-size: 1.85rem;
+      font-weight: 400;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+    .modal-meta {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .modal-tags { display: flex; gap: 0.35rem; }
+    .modal-divider {
+      height: 1px;
+      background: var(--border);
+      margin-bottom: 2rem;
+    }
+
+    /* CONTENT PANELS */
+    .content-panel { display: none; }
+    .content-panel.visible { display: block; }
+
+    .refined-content {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #d8d8d8;
+    }
+    .refined-content p { margin-bottom: 1.2rem; }
+    .refined-content em { color: var(--accent); font-style: italic; }
+
+    .raw-content {
+      background: rgba(232,164,74,0.04);
+      border: 1px solid rgba(232,164,74,0.15);
+      border-radius: var(--radius);
+      padding: 1.5rem 1.75rem;
+    }
+    .raw-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--raw-color);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      opacity: 0.7;
+    }
+    .raw-text {
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.85;
+      color: #b8a88a;
+      white-space: pre-wrap;
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      nav { padding: 0.9rem 1.25rem; }
+      .nav-links { gap: 1.2rem; }
+      .page-header { padding: 6.5rem 1.25rem 3rem; }
+      .grid-section { padding: 0 1.25rem 4rem; }
+      .modal-inner { padding: 1.5rem 1.25rem 2.5rem; }
+      .musings-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">RZL8</a>
+  <ul class="nav-links">
+    <li><a href="index.html#home">Home</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="index.html#projects">Projects</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="musings.html" class="active">Musings</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HEADER -->
+<header class="page-header">
+  <p class="page-eyebrow">// thoughts.log</p>
+  <h1 class="page-title">Musings<br><em>unfiltered & refined</em></h1>
+  <p class="page-desc">A running record of thoughts I couldn't let go of — on AI, robotics, cognition, and everything else. Each one has a raw version (how I first wrote it) and a refined one (how I'd want to say it).</p>
+  <div class="filter-row" id="filter-row">
+    <button class="filter-btn active" data-tag="all">All</button>
+  </div>
+</header>
+
+<!-- GRID -->
+<section class="grid-section">
+  <div class="musings-grid" id="musings-grid">
+    <p style="color: var(--text-muted); font-size:14px;">Loading musings…</p>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal" id="modal">
+    <div id="modal-cover-area"></div>
+    <div class="modal-inner">
+      <div class="modal-topbar">
+        <div class="toggle-group">
+          <button class="toggle-btn active-refined" id="btn-refined" onclick="setMode('refined')">Refined</button>
+          <button class="toggle-btn" id="btn-raw" onclick="setMode('raw')">Raw</button>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal()" aria-label="Close">×</button>
+      </div>
+      <h2 class="modal-title" id="modal-title"></h2>
+      <div class="modal-meta">
+        <span id="modal-date"></span>
+        <span class="modal-tags" id="modal-tags"></span>
+      </div>
+      <div class="modal-divider"></div>
+
+      <div class="content-panel visible" id="panel-refined"></div>
+      <div class="content-panel" id="panel-raw">
+        <div class="raw-content">
+          <p class="raw-label">// raw — unedited first draft</p>
+          <pre class="raw-text" id="raw-text-inner"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let allMusings = [];
+  let activeTag = 'all';
+
+  async function loadMusings() {
+    try {
+      const res = await fetch('musings.json');
+      allMusings = await res.json();
+      buildFilters();
+      renderCards(allMusings);
+    } catch (e) {
+      document.getElementById('musings-grid').innerHTML =
+        '<div class="empty-state"><p>Could not load musings.json — make sure it lives next to this file.</p></div>';
+    }
+  }
+
+  function buildFilters() {
+    const tags = new Set();
+    allMusings.forEach(m => m.tags.forEach(t => tags.add(t)));
+    const row = document.getElementById('filter-row');
+    tags.forEach(tag => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn';
+      btn.dataset.tag = tag;
+      btn.textContent = tag;
+      btn.onclick = () => filterBy(tag, btn);
+      row.appendChild(btn);
+    });
+  }
+
+  function filterBy(tag, btn) {
+    activeTag = tag;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filtered = tag === 'all' ? allMusings : allMusings.filter(m => m.tags.includes(tag));
+    renderCards(filtered);
+  }
+
+  function renderCards(list) {
+    const grid = document.getElementById('musings-grid');
+    if (!list.length) {
+      grid.innerHTML = '<div class="empty-state"><p>No musings here yet.</p></div>';
+      return;
+    }
+    grid.innerHTML = list.map(m => `
+      <article class="musing-card" onclick="openModal('${m.id}')" tabindex="0" role="button" aria-label="Open musing: ${m.title}">
+        ${m.image
+          ? `<img class="card-image" src="${m.image}" alt="" loading="lazy" />`
+          : `<div class="card-image-placeholder">${starSVG()}</div>`}
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="card-date">${formatDate(m.date)}</span>
+            <div class="card-tags">${m.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+          </div>
+          <h3 class="card-title">${m.title}</h3>
+          <p class="card-preview">${m.preview}</p>
+          <div class="card-footer">
+            <span class="read-cta">Read <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+            <span class="card-versions">raw + refined</span>
+          </div>
+        </div>
+      </article>
+    `).join('');
+
+    grid.querySelectorAll('.musing-card').forEach(card => {
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') card.click();
+      });
+    });
+  }
+
+  function openModal(id) {
+    const m = allMusings.find(x => x.id === id);
+    if (!m) return;
+
+    const coverArea = document.getElementById('modal-cover-area');
+    coverArea.innerHTML = m.image
+      ? `<img class="modal-cover" src="${m.image}" alt="" />`
+      : `<div class="modal-cover-placeholder">${starSVG()}</div>`;
+
+    document.getElementById('modal-title').textContent = m.title;
+    document.getElementById('modal-date').textContent = formatDate(m.date);
+    document.getElementById('modal-tags').innerHTML = m.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+    const refinedEl = document.getElementById('panel-refined');
+    refinedEl.innerHTML = m.refined
+      .split('\n\n')
+      .map(p => `<p>${p.replace(/\*(.*?)\*/g, '<em>$1</em>')}</p>`)
+      .join('');
+
+    document.getElementById('raw-text-inner').textContent = m.raw;
+
+    setMode('refined');
+
+    const backdrop = document.getElementById('modal-backdrop');
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    backdrop.focus();
+  }
+
+  function closeModal() {
+    document.getElementById('modal-backdrop').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function setMode(mode) {
+    const refined = document.getElementById('panel-refined');
+    const raw = document.getElementById('panel-raw');
+    const btnR = document.getElementById('btn-refined');
+    const btnRaw = document.getElementById('btn-raw');
+
+    if (mode === 'refined') {
+      refined.classList.add('visible');
+      raw.classList.remove('visible');
+      btnR.classList.add('active-refined');
+      btnRaw.classList.remove('active-raw');
+    } else {
+      raw.classList.add('visible');
+      refined.classList.remove('visible');
+      btnRaw.classList.add('active-raw');
+      btnR.classList.remove('active-refined');
+    }
+  }
+
+  function formatDate(str) {
+    const d = new Date(str + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  function starSVG() {
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>`;
+  }
+
+  document.getElementById('modal-backdrop').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  loadMusings();
+</script>
+</body>
+</html>
