@@ -435,8 +435,8 @@
 <!-- HEADER -->
 <header class="page-header">
   <p class="page-eyebrow">// thoughts.log</p>
-  <h1 class="page-title">Musings<br><em>Raw or Refined</em></h1>
-  <p class="page-desc">Raw thoughts refined (or destroyed) by AI.</p>
+  <h1 class="page-title">Musings<br><em>raw or refined</em></h1>
+  <p class="page-desc">A running record of thoughts I couldn't let go of — either Raw or Refined (or Destroyed) by AI.</p>
   <div class="filter-row" id="filter-row">
     <button class="filter-btn active" data-tag="all">All</button>
   </div>
@@ -456,8 +456,8 @@
     <div class="modal-inner">
       <div class="modal-topbar">
         <div class="toggle-group">
-          <button class="toggle-btn" id="btn-refined" onclick="setMode('refined')">Refined</button>
-          <button class="toggle-btn active-refined" id="btn-raw" onclick="setMode('raw')">Raw</button>
+          <button class="toggle-btn active-raw" id="btn-raw" onclick="setMode('raw')">Raw</button>
+          <button class="toggle-btn" id="btn-refined" onclick="setMode('refined')">AI Refined</button>
         </div>
         <button class="modal-close-btn" onclick="closeModal()" aria-label="Close">×</button>
       </div>
@@ -468,8 +468,8 @@
       </div>
       <div class="modal-divider"></div>
 
-      <div class="content-panel visible" id="panel-refined"></div>
-      <div class="content-panel" id="panel-raw">
+      <div class="content-panel" id="panel-refined"></div>
+      <div class="content-panel visible" id="panel-raw">
         <div class="raw-content">
           <p class="raw-label">// raw — unedited first draft</p>
           <pre class="raw-text" id="raw-text-inner"></pre>
@@ -480,19 +480,47 @@
 </div>
 
 <script>
+  /* -------------------------------------------------------
+     MUSINGS DATA
+     Edit this array to add/update musings.
+     Keep musings.json in sync if you use it as a backup.
+     ------------------------------------------------------- */
+  const MUSINGS_DATA = [
+    {
+      "id": "causal-blindness",
+      "title": "We Are Causally Blind",
+      "date": "2026-05-14",
+      "tags": ["AI", "Philosophy"],
+      "image": "",
+      "preview": "Every model we build predicts. None of them understand why. There's a difference — and I think it matters more than anyone in the room wants to admit.",
+      "raw": "ok so here's the thing that's been bugging me\n\nevery LLM we build just... correlates. it finds patterns. it predicts the next token. but does it *know* that flipping a switch causes the light to go on? or does it just know that switches and lights appear together?\n\nthere's a paper by pearl that basically says — correlation is the bottom rung of a three-rung ladder. above that is intervention (what if I do X?), then counterfactual (what if I had done X instead?). \n\nmost of AI is stuck on rung one. including GPT-4. including claude. including me when I'm tired.\n\nthe scary part isn't that AI doesn't understand causality. it's that we deploy it in situations that *require* causality and then act surprised when it hallucinates or fails quietly.\n\nidk. feels important.",
+      "refined": "Every model we build predicts. None of them understand *why*.\n\nJudea Pearl describes a three-rung ladder of causation: association (things that co-occur), intervention (what happens if I do X), and counterfactual (what would have happened if I'd done X instead). Nearly all of modern AI — including the most capable language models — operates almost exclusively on the first rung.\n\nThis isn't a knock on scale or architecture. It's a structural gap. A model trained on text learns that switches and lights appear together. It does not learn that flipping the switch *causes* the light to turn on. The distinction seems pedantic until you deploy that model in a medical triage system, or a legal reasoning pipeline, or an autonomous robot that needs to decide what to do when something unexpected happens.\n\nWe are building extraordinarily fluent systems that are causally blind. The question I keep returning to: can causal structure be *learned* from data, or does it need to be *given*? My current guess is — both, depending on what kind of knowledge you're after. But I'm not sure yet."
+    },
+    {
+      "id": "boredom-signal",
+      "title": "Boredom Is a Signal, Not a Flaw",
+      "date": "2026-04-02",
+      "tags": ["Psychology", "Random"],
+      "image": "",
+      "preview": "I used to try and kill boredom as fast as possible. Podcast, scroll, anything. Now I think boredom might be one of the most important feelings I have.",
+      "raw": "phone died on the commute today. forced to just... sit.\n\nfirst 5 minutes: antsy. where do I look. what do I do with my hands.\nnext 10 minutes: kind of okay actually?\nnext 15 minutes: started thinking about the ROS2 bug I'd been stuck on for a week. solved it in my head. no code open, no stackoverflow, nothing.\n\nI think boredom is the brain clearing its cache. like disk cleanup but for thoughts. \n\nwe've engineered it out of existence and I think we're paying for it without knowing it. the constant input means the associative, wandering, weird part of the brain never gets floor time.\n\nthat's probably where the interesting stuff comes from.",
+      "refined": "My phone died on the commute. For the first time in months, I sat with nothing to do.\n\nThe discomfort lasted about five minutes. After that, something strange happened — my mind wandered to a bug I'd been stuck on at work, turned it over a few times, and quietly solved it. No IDE open, no documentation, no rubber duck. Just the gap.\n\nI've been thinking about why that worked. One hypothesis: most of what we call *thinking* is actually retrieval and recombination. When we're constantly feeding the brain new input, we never give it time to do the slower, associative work — the kind that connects things across domains, surfaces forgotten context, makes unexpected leaps.\n\nBoredom used to be unavoidable. Waiting rooms, long drives, the gap between tasks. Now it's a choice, and most of us opt out by reflex. I'm not sure we fully understand the cost of that yet."
+    }
+  ];
+
   let allMusings = [];
   let activeTag = 'all';
 
   async function loadMusings() {
     try {
       const res = await fetch('musings.json');
+      if (!res.ok) throw new Error('fetch failed');
       allMusings = await res.json();
-      buildFilters();
-      renderCards(allMusings);
     } catch (e) {
-      document.getElementById('musings-grid').innerHTML =
-        '<div class="empty-state"><p>Could not load musings.json — make sure it lives next to this file.</p></div>';
+      allMusings = MUSINGS_DATA;
     }
+    buildFilters();
+    renderCards(allMusings);
   }
 
   function buildFilters() {
@@ -571,7 +599,7 @@
 
     document.getElementById('raw-text-inner').textContent = m.raw;
 
-    setMode('refined');
+    setMode('raw');
 
     const backdrop = document.getElementById('modal-backdrop');
     backdrop.classList.add('open');
