@@ -1,5 +1,5 @@
 (() => {
-  const themes = ['black', 'gray', 'white', 'shower'];
+  const themes = ['black', 'gray', 'white', 'shower', 'snow'];
   let activeTheme = 'black';
   let grayLevel = 18;
 
@@ -48,8 +48,9 @@
   };
 
   const clearWeatherProps = () => {
-    document.querySelectorAll('.weather-prop').forEach(prop => prop.remove());
+    document.querySelectorAll('.weather-prop, .snow-cap, .snowman').forEach(prop => prop.remove());
     document.querySelectorAll('.weather-host').forEach(host => host.classList.remove('weather-host'));
+    document.querySelectorAll('.snow-host').forEach(host => host.classList.remove('snow-host'));
   };
 
   const createWeatherProp = key => {
@@ -114,14 +115,80 @@
     decorateShowerSections();
   };
 
+  const decorateSnowSections = () => {
+    clearWeatherProps();
+    const pageKey = window.location.pathname || 'index';
+    const cardSelector = '.contact-panel, .project-card, .focus-card, .timeline-card, .detail-card, .musing-card, .toolkit';
+
+    document.querySelectorAll('main > section').forEach((section, sectionIndex) => {
+      const sectionKey = `${pageKey}:snow-section:${section.id || sectionIndex}`;
+      const cards = Array.from(section.querySelectorAll(cardSelector));
+
+      if (!cards.length) return;
+
+      cards.forEach((card, cardIndex) => {
+        const key = `${sectionKey}:card:${cardIndex}`;
+        const width = 42 + seededValue(`snow-width:${key}`) * 42;
+        const cap = document.createElement('span');
+        cap.className = 'snow-cap';
+        cap.style.setProperty('--snow-width', `${width}%`);
+        cap.style.setProperty('--snow-left', `${4 + seededValue(`snow-left:${key}`) * (92 - width)}%`);
+        cap.style.setProperty('--snow-depth', `${8 + seededValue(`snow-depth:${key}`) * 8}px`);
+        cap.setAttribute('aria-hidden', 'true');
+        card.classList.add('snow-host');
+        card.append(cap);
+      });
+
+      const snowmanIndex = Math.min(cards.length - 1, Math.floor(seededValue(`${sectionKey}:snowman-card`) * cards.length));
+      const snowmanHost = cards[snowmanIndex];
+      const snowman = document.createElement('span');
+      const side = seededValue(`${sectionKey}:snowman-side`) > 0.5 ? 'right' : 'left';
+      const head = document.createElement('span');
+      const body = document.createElement('span');
+      snowman.className = `snowman snowman-${side}`;
+      head.className = 'snowman-head';
+      body.className = 'snowman-body';
+      snowman.style.setProperty('--snowman-tilt', `${Math.round(seededValue(`${sectionKey}:snowman-tilt`) * 10 - 5)}deg`);
+      snowman.setAttribute('aria-hidden', 'true');
+      snowman.append(head, body);
+      snowmanHost.append(snowman);
+    });
+  };
+
+  const renderSnow = () => {
+    const fragment = document.createDocumentFragment();
+    for (let index = 0; index < 200; index += 1) {
+      const flake = document.createElement('span');
+      const key = `snowflake:${index}`;
+      const speed = 10 + seededValue(`speed:${key}`) * 20;
+      const phase = (index * 0.61803398875 + seededValue(`phase:${key}`) * 0.12) % 1;
+      const xPosition = ((index + seededValue(`x:${key}`) * 0.9) / 200) * 100;
+      const drift = seededValue(`drift:${key}`) * 6 - 3;
+      flake.className = 'snowflake';
+      flake.style.setProperty('--snow-x', `${xPosition}vw`);
+      flake.style.setProperty('--snow-scale', String(0.08 + seededValue(`scale:${key}`) * 0.92));
+      flake.style.setProperty('--snow-speed', `${speed}s`);
+      flake.style.setProperty('--snow-delay', `${-phase * speed}s`);
+      flake.style.setProperty('--snow-drift', `${drift}vw`);
+      flake.style.setProperty('--snow-drift-end', `${drift / 2}vw`);
+      flake.style.setProperty('--snow-yoyo-y', `${30 + seededValue(`yoyo:${key}`) * 50}vh`);
+      flake.style.setProperty('--snow-opacity', String(0.08 + seededValue(`opacity:${key}`) * 0.92));
+      fragment.append(flake);
+    }
+    weatherLayer.append(fragment);
+    decorateSnowSections();
+  };
+
   const updateWeather = theme => {
     weatherLayer.replaceChildren();
     clearWeatherProps();
     if (theme === 'shower') renderShower();
+    if (theme === 'snow') renderSnow();
   };
 
   window.refreshWeatherDecor = () => {
     if (document.documentElement.dataset.theme === 'shower') decorateShowerSections();
+    if (document.documentElement.dataset.theme === 'snow') decorateSnowSections();
   };
 
   const navShell = document.querySelector('.nav-shell');
@@ -135,7 +202,7 @@
     const select = document.createElement('select');
     select.setAttribute('aria-label', 'Color theme');
 
-    [['black', 'Black'], ['gray', 'Gray'], ['white', 'White'], ['shower', 'Shower']].forEach(([value, name]) => {
+    [['black', 'Black'], ['gray', 'Gray'], ['white', 'White'], ['shower', 'Shower'], ['snow', 'Snow']].forEach(([value, name]) => {
       const option = document.createElement('option');
       option.value = value;
       option.textContent = name;
