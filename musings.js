@@ -77,6 +77,8 @@
       card.addEventListener('click', () => openMusing(musing));
       grid.append(card);
     });
+
+    window.refreshWeatherDecor?.();
   };
 
   const renderFilters = () => {
