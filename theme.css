@@ -29,10 +29,11 @@
 
 html[data-theme='gray'] {
   color-scheme: dark;
-  --bg: #171717;
-  --surface: #202020;
-  --surface-2: #282828;
-  --surface-3: #303030;
+  --gray-level: 18%;
+  --bg: hsl(0 0% var(--gray-level));
+  --surface: hsl(0 0% calc(var(--gray-level) + 4%));
+  --surface-2: hsl(0 0% calc(var(--gray-level) + 8%));
+  --surface-3: hsl(0 0% calc(var(--gray-level) + 12%));
   --border: rgba(255, 255, 255, 0.14);
   --border-strong: rgba(255, 255, 255, 0.34);
   --text: #f0f0f0;
@@ -179,6 +180,55 @@ img, svg {
   cursor: pointer;
   font-family: var(--mono);
   font-size: 0.72rem;
+}
+
+.gray-tuner {
+  position: relative;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+}
+
+.gray-tuner summary {
+  min-height: 34px;
+  padding: 0.42rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  cursor: pointer;
+  list-style: none;
+  color: var(--text-soft);
+}
+
+.gray-tuner summary::-webkit-details-marker {
+  display: none;
+}
+
+.gray-tuner-panel {
+  position: absolute;
+  top: calc(100% + 0.7rem);
+  right: 0;
+  z-index: 120;
+  width: 220px;
+  padding: 0.9rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  box-shadow: var(--shadow);
+}
+
+.gray-tuner-panel label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.55rem;
+  color: var(--text-soft);
+}
+
+.gray-tuner-panel input {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
 }
 
 .nav-links {
@@ -799,7 +849,7 @@ p {
 }
 
 html[data-theme='gray'] .site-nav {
-  background: rgba(23, 23, 23, 0.9);
+  background: hsl(0 0% var(--gray-level) / 0.92);
 }
 
 html[data-theme='gray'] .focus-card,
@@ -807,12 +857,20 @@ html[data-theme='gray'] .project-card,
 html[data-theme='gray'] .timeline-card,
 html[data-theme='gray'] .detail-card,
 html[data-theme='gray'] .metric-card {
-  background: linear-gradient(145deg, rgba(45, 45, 45, 0.96), rgba(29, 29, 29, 0.96));
+  background: linear-gradient(
+    145deg,
+    hsl(0 0% calc(var(--gray-level) + 9%) / 0.96),
+    hsl(0 0% calc(var(--gray-level) + 3%) / 0.96)
+  );
 }
 
 html[data-theme='gray'] .toolkit,
 html[data-theme='gray'] .contact-panel {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.075), rgba(31, 31, 31, 0.96));
+  background: linear-gradient(
+    135deg,
+    hsl(0 0% calc(var(--gray-level) + 12%) / 0.96),
+    hsl(0 0% calc(var(--gray-level) + 3%) / 0.96)
+  );
 }
 
 html[data-theme='gray'] .project-card.featured::after {
