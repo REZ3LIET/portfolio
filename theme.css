@@ -1138,8 +1138,7 @@ html[data-theme='snow'] .dialog-cover-placeholder {
   pointer-events: none;
 }
 
-.weather-layer::before,
-.weather-layer::after {
+.weather-layer::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -1152,11 +1151,6 @@ html[data-theme='shower'] .weather-layer::before {
   background: linear-gradient(180deg, rgba(7, 13, 17, 0.24), transparent 34%, rgba(7, 13, 17, 0.12));
 }
 
-html[data-theme='shower'] .weather-layer::after {
-  background: rgba(226, 243, 250, 0.42);
-  animation: shower-flash 14s linear infinite;
-}
-
 html[data-theme='snow'] .weather-layer::before {
   opacity: 1;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent 40%, rgba(168, 204, 220, 0.12));
@@ -1166,9 +1160,11 @@ html[data-theme='snow'] .weather-layer::before {
   position: absolute;
   top: -18vh;
   left: var(--rain-left);
-  width: 1px;
+  width: var(--rain-width);
   height: var(--rain-length);
-  background: linear-gradient(180deg, transparent, rgba(207, 231, 240, 0.48));
+  border-radius: 999px;
+  background: linear-gradient(180deg, transparent, rgba(205, 235, 246, 0.68));
+  box-shadow: 0 0 3px rgba(195, 228, 240, 0.24);
   opacity: var(--rain-opacity);
   transform: rotate(8deg);
   animation: rain-fall var(--rain-speed) linear var(--rain-delay) infinite;
@@ -1176,13 +1172,7 @@ html[data-theme='snow'] .weather-layer::before {
 
 @keyframes rain-fall {
   from { transform: translate3d(0, -18vh, 0) rotate(8deg); }
-  to { transform: translate3d(-10vw, 132vh, 0) rotate(8deg); }
-}
-
-@keyframes shower-flash {
-  0%, 72%, 74%, 76%, 100% { opacity: 0; }
-  73% { opacity: 0.1; }
-  75% { opacity: 0.035; }
+  to { transform: translate3d(-8vw, 132vh, 0) rotate(8deg); }
 }
 
 .snowflake {
@@ -1718,9 +1708,5 @@ html[data-theme='snow'] .snow-host {
   .rain-drop,
   .snowflake {
     display: none;
-  }
-
-  html[data-theme='shower'] .weather-layer::after {
-    animation: none;
   }
 }

@@ -101,14 +101,20 @@
 
   const renderShower = () => {
     const fragment = document.createDocumentFragment();
-    for (let index = 0; index < 76; index += 1) {
+    const dropCount = 140;
+    for (let index = 0; index < dropCount; index += 1) {
       const drop = document.createElement('span');
+      const key = `rain:${index}`;
+      const speed = 0.58 + seededValue(`speed:${key}`) * 0.72;
+      const phase = (index * 0.61803398875 + seededValue(`phase:${key}`) * 0.14) % 1;
+      const xPosition = ((index + seededValue(`x:${key}`) * 0.88) / dropCount) * 112 - 6;
       drop.className = 'rain-drop';
-      drop.style.setProperty('--rain-left', `${seededValue(`rain-left:${index}`) * 115 - 5}%`);
-      drop.style.setProperty('--rain-length', `${36 + seededValue(`rain-length:${index}`) * 62}px`);
-      drop.style.setProperty('--rain-speed', `${0.65 + seededValue(`rain-speed:${index}`) * 0.8}s`);
-      drop.style.setProperty('--rain-delay', `${seededValue(`rain-delay:${index}`) * -3}s`);
-      drop.style.setProperty('--rain-opacity', String(0.28 + seededValue(`rain-opacity:${index}`) * 0.56));
+      drop.style.setProperty('--rain-left', `${xPosition}%`);
+      drop.style.setProperty('--rain-width', `${0.7 + seededValue(`width:${key}`) * 1.15}px`);
+      drop.style.setProperty('--rain-length', `${32 + seededValue(`length:${key}`) * 72}px`);
+      drop.style.setProperty('--rain-speed', `${speed}s`);
+      drop.style.setProperty('--rain-delay', `${-phase * speed}s`);
+      drop.style.setProperty('--rain-opacity', String(0.18 + seededValue(`opacity:${key}`) * 0.68));
       fragment.append(drop);
     }
     weatherLayer.append(fragment);
