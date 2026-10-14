@@ -1,655 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Musings — Samar Kale (REZ3LIET)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #0a0a0a;
-      --bg-card: #111111;
-      --bg-card-hover: #161616;
-      --border: rgba(255,255,255,0.08);
-      --border-hover: rgba(255,255,255,0.18);
-      --text-primary: #f0f0f0;
-      --text-secondary: #888;
-      --text-muted: #555;
-      --accent: #7c6af7;
-      --accent-dim: rgba(124,106,247,0.12);
-      --accent-dim2: rgba(124,106,247,0.06);
-      --raw-color: #e8a44a;
-      --raw-dim: rgba(232,164,74,0.12);
-      --font: 'Inter', sans-serif;
-      --mono: 'JetBrains Mono', monospace;
-      --radius: 12px;
-      --radius-sm: 8px;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text-primary);
-      font-family: var(--font);
-      font-size: 15px;
-      line-height: 1.65;
-      min-height: 100vh;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background: rgba(10,10,10,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-logo {
-      font-family: var(--mono);
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--accent);
-      text-decoration: none;
-      letter-spacing: 0.02em;
-    }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 14px;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover, .nav-links a.active { color: var(--text-primary); }
-    .nav-links a.active { color: var(--accent); }
-
-    /* PAGE HEADER */
-    .page-header {
-      padding: 8rem 2rem 4rem;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    .page-eyebrow {
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--accent);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-    .page-title {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 300;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      color: var(--text-primary);
-    }
-    .page-title em {
-      font-style: normal;
-      color: var(--accent);
-    }
-    .page-desc {
-      margin-top: 1.25rem;
-      color: var(--text-secondary);
-      font-size: 15px;
-      max-width: 520px;
-      line-height: 1.7;
-    }
-    .filter-row {
-      margin-top: 2rem;
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    .filter-btn {
-      padding: 0.35rem 0.9rem;
-      border-radius: 2rem;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-secondary);
-      font-size: 13px;
-      font-family: var(--font);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .filter-btn:hover { border-color: var(--border-hover); color: var(--text-primary); }
-    .filter-btn.active {
-      background: var(--accent-dim);
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    /* CARD GRID */
-    .grid-section {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 2rem 6rem;
-    }
-    .musings-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.25rem;
-    }
-    .musing-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      cursor: pointer;
-      transition: border-color 0.25s, background 0.25s, transform 0.2s;
-      display: flex;
-      flex-direction: column;
-    }
-    .musing-card:hover {
-      border-color: var(--border-hover);
-      background: var(--bg-card-hover);
-      transform: translateY(-2px);
-    }
-    .card-image {
-      width: 100%;
-      aspect-ratio: 16/7;
-      object-fit: cover;
-      display: block;
-      background: #1a1a1a;
-    }
-    .card-image-placeholder {
-      width: 100%;
-      aspect-ratio: 16/7;
-      background: linear-gradient(135deg, #111 0%, #1a1828 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .card-image-placeholder svg {
-      opacity: 0.15;
-      width: 32px; height: 32px;
-    }
-    .card-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
-    .card-meta {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.75rem;
-    }
-    .card-date {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--text-muted);
-      letter-spacing: 0.04em;
-    }
-    .card-tags { display: flex; gap: 0.35rem; margin-left: auto; }
-    .tag {
-      font-size: 11px;
-      padding: 0.15rem 0.55rem;
-      border-radius: 2rem;
-      background: var(--accent-dim2);
-      color: var(--accent);
-      border: 1px solid rgba(124,106,247,0.2);
-      font-family: var(--mono);
-    }
-    .card-title {
-      font-size: 17px;
-      font-weight: 500;
-      color: var(--text-primary);
-      line-height: 1.3;
-      margin-bottom: 0.6rem;
-      letter-spacing: -0.01em;
-    }
-    .card-preview {
-      font-size: 13.5px;
-      color: var(--text-secondary);
-      line-height: 1.65;
-      flex: 1;
-    }
-    .card-footer {
-      margin-top: 1.1rem;
-      padding-top: 0.9rem;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .read-cta {
-      font-size: 13px;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-    .read-cta svg { width:14px; height:14px; transition: transform 0.2s; }
-    .musing-card:hover .read-cta svg { transform: translateX(3px); }
-    .card-versions {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-family: var(--mono);
-    }
-
-    /* EMPTY STATE */
-    .empty-state {
-      text-align: center;
-      padding: 5rem 1rem;
-      color: var(--text-muted);
-    }
-    .empty-state p { margin-top: 0.5rem; font-size: 14px; }
-
-    /* MODAL OVERLAY */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      z-index: 200;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(6px);
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 2rem 1rem;
-      overflow-y: auto;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s;
-    }
-    .modal-backdrop.open {
-      opacity: 1;
-      pointer-events: all;
-    }
-    .modal {
-      background: #0f0f0f;
-      border: 1px solid var(--border-hover);
-      border-radius: 16px;
-      width: 100%;
-      max-width: 720px;
-      margin: auto;
-      overflow: hidden;
-      transform: translateY(20px);
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .modal-backdrop.open .modal {
-      transform: translateY(0);
-    }
-    .modal-cover {
-      width: 100%;
-      aspect-ratio: 21/7;
-      object-fit: cover;
-      display: block;
-      background: #1a1828;
-    }
-    .modal-cover-placeholder {
-      width: 100%;
-      aspect-ratio: 21/7;
-      background: linear-gradient(135deg, #0f0f0f 0%, #1a1828 50%, #0f0f0f 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-cover-placeholder svg { opacity: 0.1; width: 48px; height: 48px; }
-    .modal-inner { padding: 2rem 2.5rem 3rem; }
-    .modal-topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.75rem;
-    }
-    .modal-close-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-secondary);
-      cursor: pointer;
-      font-size: 18px;
-      line-height: 1;
-      transition: all 0.2s;
-    }
-    .modal-close-btn:hover {
-      border-color: var(--border-hover);
-      color: var(--text-primary);
-    }
-    .toggle-group {
-      display: flex;
-      border: 1px solid var(--border);
-      border-radius: 2rem;
-      overflow: hidden;
-      background: var(--bg-card);
-    }
-    .toggle-btn {
-      padding: 0.35rem 1rem;
-      border: none;
-      background: transparent;
-      font-family: var(--mono);
-      font-size: 12px;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-      color: var(--text-muted);
-      transition: all 0.2s;
-    }
-    .toggle-btn.active-refined {
-      background: var(--accent-dim);
-      color: var(--accent);
-    }
-    .toggle-btn.active-raw {
-      background: var(--raw-dim);
-      color: var(--raw-color);
-    }
-    .modal-title {
-      font-size: 1.85rem;
-      font-weight: 400;
-      letter-spacing: -0.025em;
-      line-height: 1.2;
-      color: var(--text-primary);
-      margin-bottom: 0.5rem;
-    }
-    .modal-meta {
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--text-muted);
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-    .modal-tags { display: flex; gap: 0.35rem; }
-    .modal-divider {
-      height: 1px;
-      background: var(--border);
-      margin-bottom: 2rem;
-    }
-
-    /* CONTENT PANELS */
-    .content-panel { display: none; }
-    .content-panel.visible { display: block; }
-
-    .refined-content {
-      font-size: 16px;
-      line-height: 1.8;
-      color: #d8d8d8;
-    }
-    .refined-content p { margin-bottom: 1.2rem; }
-    .refined-content em { color: var(--accent); font-style: italic; }
-
-    .raw-content {
-      background: rgba(232,164,74,0.04);
-      border: 1px solid rgba(232,164,74,0.15);
-      border-radius: var(--radius);
-      padding: 1.5rem 1.75rem;
-    }
-    .raw-label {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--raw-color);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-      opacity: 0.7;
-    }
-    .raw-text {
-      font-family: var(--mono);
-      font-size: 14px;
-      line-height: 1.85;
-      color: #b8a88a;
-      white-space: pre-wrap;
-    }
-
-    /* SCROLLBAR */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
-
-    /* RESPONSIVE */
-    @media (max-width: 640px) {
-      nav { padding: 0.9rem 1.25rem; }
-      .nav-links { gap: 1.2rem; }
-      .page-header { padding: 6.5rem 1.25rem 3rem; }
-      .grid-section { padding: 0 1.25rem 4rem; }
-      .modal-inner { padding: 1.5rem 1.25rem 2.5rem; }
-      .musings-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Raw and AI-refined notes by Samar Kale on causality, time, thought, and self.">
+  <meta name="theme-color" content="#080b0d">
+  <title>Musings — Samar Kale</title>
+  <link rel="stylesheet" href="theme.css">
+  <script src="site.js" defer></script>
+  <script src="musings-data.js" defer></script>
+  <script src="musings.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
-<!-- NAV -->
-<nav>
-  <a class="nav-logo" href="index.html">RZL8</a>
-  <ul class="nav-links">
-    <li><a href="index.html#home">Home</a></li>
-    <li><a href="index.html#skills">Skills</a></li>
-    <li><a href="index.html#projects">Projects</a></li>
-    <li><a href="index.html#experience">Experience</a></li>
-    <li><a href="musings.html" class="active">Musings</a></li>
-    <li><a href="index.html#contact">Contact</a></li>
-  </ul>
-</nav>
-
-<!-- HEADER -->
-<header class="page-header">
-  <p class="page-eyebrow">// thoughts.log</p>
-  <h1 class="page-title">Musings<br><em>raw or refined</em></h1>
-  <p class="page-desc">A running record of thoughts I couldn't let go of — either Raw or Refined (or Destroyed) by AI.</p>
-  <div class="filter-row" id="filter-row">
-    <button class="filter-btn active" data-tag="all">All</button>
-  </div>
-</header>
-
-<!-- GRID -->
-<section class="grid-section">
-  <div class="musings-grid" id="musings-grid">
-    <p style="color: var(--text-muted); font-size:14px;">Loading musings…</p>
-  </div>
-</section>
-
-<!-- MODAL -->
-<div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-  <div class="modal" id="modal">
-    <div id="modal-cover-area"></div>
-    <div class="modal-inner">
-      <div class="modal-topbar">
-        <div class="toggle-group">
-          <button class="toggle-btn active-raw" id="btn-raw" onclick="setMode('raw')">Raw</button>
-          <button class="toggle-btn" id="btn-refined" onclick="setMode('refined')">AI Refined</button>
-        </div>
-        <button class="modal-close-btn" onclick="closeModal()" aria-label="Close">×</button>
-      </div>
-      <h2 class="modal-title" id="modal-title"></h2>
-      <div class="modal-meta">
-        <span id="modal-date"></span>
-        <span class="modal-tags" id="modal-tags"></span>
-      </div>
-      <div class="modal-divider"></div>
-
-      <div class="content-panel" id="panel-refined"></div>
-      <div class="content-panel visible" id="panel-raw">
-        <div class="raw-content">
-          <p class="raw-label">// raw — unedited first draft</p>
-          <pre class="raw-text" id="raw-text-inner"></pre>
-        </div>
-      </div>
+  <nav class="site-nav" aria-label="Primary navigation">
+    <div class="nav-shell">
+      <a class="nav-logo" href="index.html" aria-label="Samar Kale, home">RZL8 <span>/ Samar Kale</span></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-links" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="primary-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#focus">Focus</a></li>
+        <li><a href="index.html#work">Work</a></li>
+        <li><a href="experience.html">Experience</a></li>
+        <li><a href="musings.html" aria-current="page">Musings</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
     </div>
-  </div>
-</div>
+  </nav>
 
-<script>
-  /* -------------------------------------------------------
-     MUSINGS DATA
-     Edit this array to add/update musings.
-     Keep musings.json in sync if you use it as a backup.
-     ------------------------------------------------------- */
-  const MUSINGS_DATA = [
-    {
-      "id": "causal-blindness",
-      "title": "We Are Causally Blind",
-      "date": "2026-05-14",
-      "tags": ["AI", "Philosophy"],
-      "image": "",
-      "preview": "Every model we build predicts. None of them understand why. There's a difference — and I think it matters more than anyone in the room wants to admit.",
-      "raw": "ok so here's the thing that's been bugging me\n\nevery LLM we build just... correlates. it finds patterns. it predicts the next token. but does it *know* that flipping a switch causes the light to go on? or does it just know that switches and lights appear together?\n\nthere's a paper by pearl that basically says — correlation is the bottom rung of a three-rung ladder. above that is intervention (what if I do X?), then counterfactual (what if I had done X instead?). \n\nmost of AI is stuck on rung one. including GPT-4. including claude. including me when I'm tired.\n\nthe scary part isn't that AI doesn't understand causality. it's that we deploy it in situations that *require* causality and then act surprised when it hallucinates or fails quietly.\n\nidk. feels important.",
-      "refined": "Every model we build predicts. None of them understand *why*.\n\nJudea Pearl describes a three-rung ladder of causation: association (things that co-occur), intervention (what happens if I do X), and counterfactual (what would have happened if I'd done X instead). Nearly all of modern AI — including the most capable language models — operates almost exclusively on the first rung.\n\nThis isn't a knock on scale or architecture. It's a structural gap. A model trained on text learns that switches and lights appear together. It does not learn that flipping the switch *causes* the light to turn on. The distinction seems pedantic until you deploy that model in a medical triage system, or a legal reasoning pipeline, or an autonomous robot that needs to decide what to do when something unexpected happens.\n\nWe are building extraordinarily fluent systems that are causally blind. The question I keep returning to: can causal structure be *learned* from data, or does it need to be *given*? My current guess is — both, depending on what kind of knowledge you're after. But I'm not sure yet."
-    },
-    {
-      "id": "boredom-signal",
-      "title": "Boredom Is a Signal, Not a Flaw",
-      "date": "2026-04-02",
-      "tags": ["Psychology", "Random"],
-      "image": "",
-      "preview": "I used to try and kill boredom as fast as possible. Podcast, scroll, anything. Now I think boredom might be one of the most important feelings I have.",
-      "raw": "phone died on the commute today. forced to just... sit.\n\nfirst 5 minutes: antsy. where do I look. what do I do with my hands.\nnext 10 minutes: kind of okay actually?\nnext 15 minutes: started thinking about the ROS2 bug I'd been stuck on for a week. solved it in my head. no code open, no stackoverflow, nothing.\n\nI think boredom is the brain clearing its cache. like disk cleanup but for thoughts. \n\nwe've engineered it out of existence and I think we're paying for it without knowing it. the constant input means the associative, wandering, weird part of the brain never gets floor time.\n\nthat's probably where the interesting stuff comes from.",
-      "refined": "My phone died on the commute. For the first time in months, I sat with nothing to do.\n\nThe discomfort lasted about five minutes. After that, something strange happened — my mind wandered to a bug I'd been stuck on at work, turned it over a few times, and quietly solved it. No IDE open, no documentation, no rubber duck. Just the gap.\n\nI've been thinking about why that worked. One hypothesis: most of what we call *thinking* is actually retrieval and recombination. When we're constantly feeding the brain new input, we never give it time to do the slower, associative work — the kind that connects things across domains, surfaces forgotten context, makes unexpected leaps.\n\nBoredom used to be unavoidable. Waiting rooms, long drives, the gap between tasks. Now it's a choice, and most of us opt out by reflex. I'm not sure we fully understand the cost of that yet."
-    }
-  ];
+  <main id="main-content">
+    <header class="page-hero page-shell musings-header">
+      <a class="breadcrumb" href="index.html">← Home</a>
+      <p class="eyebrow">Thoughts.log</p>
+      <h1>Musings, <span class="accent">raw or refined.</span></h1>
+      <p class="lead">A running record of thoughts I could not let go of—kept in their first form and placed beside an AI-refined reading.</p>
+      <div class="filter-row" id="filter-row" aria-label="Filter musings">
+        <button class="filter-btn" type="button" data-tag="all" aria-pressed="true">All</button>
+      </div>
+    </header>
 
-  let allMusings = [];
-  let activeTag = 'all';
+    <section class="page-shell" aria-label="Musing entries">
+      <div class="musings-grid" id="musings-grid" aria-live="polite">
+        <div class="empty-state"><p>Loading musings…</p></div>
+      </div>
+    </section>
+  </main>
 
-  async function loadMusings() {
-    try {
-      const res = await fetch('musings.json');
-      if (!res.ok) throw new Error('fetch failed');
-      allMusings = await res.json();
-    } catch (e) {
-      allMusings = MUSINGS_DATA;
-    }
-    buildFilters();
-    renderCards(allMusings);
-  }
-
-  function buildFilters() {
-    const tags = new Set();
-    allMusings.forEach(m => m.tags.forEach(t => tags.add(t)));
-    const row = document.getElementById('filter-row');
-    tags.forEach(tag => {
-      const btn = document.createElement('button');
-      btn.className = 'filter-btn';
-      btn.dataset.tag = tag;
-      btn.textContent = tag;
-      btn.onclick = () => filterBy(tag, btn);
-      row.appendChild(btn);
-    });
-  }
-
-  function filterBy(tag, btn) {
-    activeTag = tag;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const filtered = tag === 'all' ? allMusings : allMusings.filter(m => m.tags.includes(tag));
-    renderCards(filtered);
-  }
-
-  function renderCards(list) {
-    const grid = document.getElementById('musings-grid');
-    if (!list.length) {
-      grid.innerHTML = '<div class="empty-state"><p>No musings here yet.</p></div>';
-      return;
-    }
-    grid.innerHTML = list.map(m => `
-      <article class="musing-card" onclick="openModal('${m.id}')" tabindex="0" role="button" aria-label="Open musing: ${m.title}">
-        ${m.image
-          ? `<img class="card-image" src="${m.image}" alt="" loading="lazy" />`
-          : `<div class="card-image-placeholder">${starSVG()}</div>`}
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="card-date">${formatDate(m.date)}</span>
-            <div class="card-tags">${m.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-          </div>
-          <h3 class="card-title">${m.title}</h3>
-          <p class="card-preview">${m.preview}</p>
-          <div class="card-footer">
-            <span class="read-cta">Read <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
-            <span class="card-versions">raw + refined</span>
-          </div>
+  <dialog class="musing-dialog" id="musing-dialog" aria-labelledby="dialog-title">
+    <div id="dialog-cover"></div>
+    <div class="dialog-body">
+      <div class="dialog-toolbar">
+        <div class="mode-group" aria-label="Reading version">
+          <button class="mode-btn" id="mode-raw" type="button" aria-pressed="true">Raw</button>
+          <button class="mode-btn" id="mode-refined" type="button" aria-pressed="false">AI refined</button>
         </div>
-      </article>
-    `).join('');
+        <form method="dialog">
+          <button class="dialog-close" aria-label="Close musing">×</button>
+        </form>
+      </div>
+      <h2 class="dialog-title" id="dialog-title"></h2>
+      <div class="dialog-meta">
+        <time id="dialog-date"></time>
+        <div class="tag-list" id="dialog-tags"></div>
+      </div>
+      <div class="musing-content" id="dialog-content"></div>
+    </div>
+  </dialog>
 
-    grid.querySelectorAll('.musing-card').forEach(card => {
-      card.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') card.click();
-      });
-    });
-  }
-
-  function openModal(id) {
-    const m = allMusings.find(x => x.id === id);
-    if (!m) return;
-
-    const coverArea = document.getElementById('modal-cover-area');
-    coverArea.innerHTML = m.image
-      ? `<img class="modal-cover" src="${m.image}" alt="" />`
-      : `<div class="modal-cover-placeholder">${starSVG()}</div>`;
-
-    document.getElementById('modal-title').textContent = m.title;
-    document.getElementById('modal-date').textContent = formatDate(m.date);
-    document.getElementById('modal-tags').innerHTML = m.tags.map(t => `<span class="tag">${t}</span>`).join('');
-
-    const refinedEl = document.getElementById('panel-refined');
-    refinedEl.innerHTML = m.refined
-      .split('\n\n')
-      .map(p => `<p>${p.replace(/\*(.*?)\*/g, '<em>$1</em>')}</p>`)
-      .join('');
-
-    document.getElementById('raw-text-inner').textContent = m.raw;
-
-    setMode('raw');
-
-    const backdrop = document.getElementById('modal-backdrop');
-    backdrop.classList.add('open');
-    document.body.style.overflow = 'hidden';
-
-    backdrop.focus();
-  }
-
-  function closeModal() {
-    document.getElementById('modal-backdrop').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  function setMode(mode) {
-    const refined = document.getElementById('panel-refined');
-    const raw = document.getElementById('panel-raw');
-    const btnR = document.getElementById('btn-refined');
-    const btnRaw = document.getElementById('btn-raw');
-
-    if (mode === 'refined') {
-      refined.classList.add('visible');
-      raw.classList.remove('visible');
-      btnR.classList.add('active-refined');
-      btnRaw.classList.remove('active-raw');
-    } else {
-      raw.classList.add('visible');
-      refined.classList.remove('visible');
-      btnRaw.classList.add('active-raw');
-      btnR.classList.remove('active-refined');
-    }
-  }
-
-  function formatDate(str) {
-    const d = new Date(str + 'T00:00:00');
-    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-  }
-
-  function starSVG() {
-    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>`;
-  }
-
-  document.getElementById('modal-backdrop').addEventListener('click', e => {
-    if (e.target === e.currentTarget) closeModal();
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
-  });
-
-  loadMusings();
-</script>
+  <footer class="site-footer">
+    <span>© <span data-current-year>2026</span> Samar Kale</span>
+    <span>Raw notes · AI-refined readings</span>
+  </footer>
 </body>
 </html>
