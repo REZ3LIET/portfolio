@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Read Musings:Webtoons by Samar Kale.">
+  <meta name="theme-color" content="#080b0d">
+  <title>Musings:Webtoons — Samar Kale</title>
+  <link rel="stylesheet" href="theme.css">
+  <script src="site.js" defer></script>
+  <script src="webtoons-data.js" defer></script>
+  <script src="webtoon-reader.js" defer></script>
+</head>
+<body class="webtoon-reader-page">
+  <a class="skip-link" href="#main-content">Skip to episode</a>
+
+  <nav class="site-nav" aria-label="Primary navigation">
+    <div class="nav-shell">
+      <a class="nav-logo" href="index.html" aria-label="Samar Kale, home">RZL8 <span>/ Samar Kale</span></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-links" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="primary-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#focus">Focus</a></li>
+        <li><a href="index.html#work">Work</a></li>
+        <li><a href="experience.html">Experience</a></li>
+        <li><a href="musings.html" aria-current="page">Musings</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="webtoon-progress" aria-hidden="true"><span id="reading-progress"></span></div>
+
+  <main id="main-content">
+    <header class="webtoon-reader-header page-shell">
+      <a class="breadcrumb" href="musings.html">← All musings</a>
+      <p class="eyebrow" id="reader-series">Musings:Webtoons</p>
+      <p class="webtoon-episode-number" id="reader-episode"></p>
+      <h1 id="reader-title">Loading episode…</h1>
+      <div class="webtoon-reader-meta">
+        <time id="reader-date"></time>
+        <div class="tag-list" id="reader-tags"></div>
+      </div>
+      <p class="webtoon-scroll-cue">Scroll to read <span aria-hidden="true">↓</span></p>
+    </header>
+
+    <section class="webtoon-stage" aria-label="Episode artwork">
+      <div class="webtoon-strip" id="webtoon-strip">
+        <div class="webtoon-loading">Preparing episode…</div>
+      </div>
+    </section>
+
+    <section class="webtoon-extras page-shell" aria-labelledby="episode-notes-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">After the scroll</p>
+          <h2 id="episode-notes-title">Episode notes</h2>
+        </div>
+        <p>Prefer another format? Read the transcript below or keep the original PDF.</p>
+      </div>
+
+      <div class="webtoon-actions">
+        <a class="button" id="pdf-link" href="#" download>Download original PDF</a>
+        <a class="button secondary" href="musings.html">Back to Musings</a>
+      </div>
+
+      <details class="webtoon-transcript">
+        <summary>Read the accessible transcript</summary>
+        <div class="transcript-body" id="transcript-body"></div>
+      </details>
+
+      <nav class="episode-navigation" aria-label="Episode navigation">
+        <a href="musings.html"><span>Previous</span>Musings index</a>
+        <span class="episode-next" aria-disabled="true"><span>Next</span>Episode 2 · Coming soon</span>
+      </nav>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>© <span data-current-year>2026</span> Samar Kale</span>
+    <span>Musings:Webtoons</span>
+  </footer>
+</body>
+</html>

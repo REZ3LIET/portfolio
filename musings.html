@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Raw and AI-refined notes by Samar Kale on causality, time, thought, and self.">
+  <meta name="description" content="Written notes and illustrated webtoons by Samar Kale on causality, time, thought, mathematics, and self.">
   <meta name="theme-color" content="#080b0d">
   <title>Musings — Samar Kale</title>
   <link rel="stylesheet" href="theme.css">
   <script src="site.js" defer></script>
   <script src="musings-data.js" defer></script>
   <script src="musings.js" defer></script>
+  <script src="webtoons-data.js" defer></script>
+  <script src="webtoons.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -36,15 +38,39 @@
       <a class="breadcrumb" href="index.html">← Home</a>
       <p class="eyebrow">Thoughts.log</p>
       <h1>Musings, <span class="accent">raw or refined.</span></h1>
-      <p class="lead">A running record of thoughts I could not let go of—kept in their first form and placed beside an AI-refined reading.</p>
-      <div class="filter-row" id="filter-row" aria-label="Filter musings">
-        <button class="filter-btn" type="button" data-tag="all" aria-pressed="true">All</button>
-      </div>
+      <p class="lead">A running record of thoughts I could not let go of—written notes kept in their first form and illustrated webtoons that follow an idea wherever it leads.</p>
     </header>
 
-    <section class="page-shell" aria-label="Musing entries">
-      <div class="musings-grid" id="musings-grid" aria-live="polite">
-        <div class="empty-state"><p>Loading musings…</p></div>
+    <section class="section webtoon-section" aria-labelledby="webtoons-title">
+      <div class="page-shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Musings:Webtoons</p>
+            <h2 id="webtoons-title">Ideas, told vertically.</h2>
+          </div>
+          <p>Short illustrated episodes where questions become conversations, diagrams, and stories.</p>
+        </div>
+        <div class="musings-grid webtoons-grid" id="webtoons-grid" aria-live="polite">
+          <div class="empty-state"><p>Loading webtoons…</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section written-musings-section" aria-labelledby="thoughts-title">
+      <div class="page-shell">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Musings:Thoughts</p>
+            <h2 id="thoughts-title">Thoughts, raw or refined.</h2>
+          </div>
+          <p>Written in their first form and placed beside an AI-refined reading.</p>
+        </div>
+        <div class="filter-row" id="filter-row" aria-label="Filter written thoughts">
+          <button class="filter-btn" type="button" data-tag="all" aria-pressed="true">All</button>
+        </div>
+        <div class="musings-grid" id="musings-grid" aria-live="polite">
+          <div class="empty-state"><p>Loading musings…</p></div>
+        </div>
       </div>
     </section>
   </main>
@@ -72,7 +98,7 @@
 
   <footer class="site-footer">
     <span>© <span data-current-year>2026</span> Samar Kale</span>
-    <span>Raw notes · AI-refined readings</span>
+    <span>Raw notes · AI-refined readings · Illustrated webtoons</span>
   </footer>
 </body>
 </html>
