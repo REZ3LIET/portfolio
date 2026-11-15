@@ -20,6 +20,7 @@
       </button>
       <ul class="nav-links" id="primary-links">
         <li><a href="#home" aria-current="page">Home</a></li>
+        <li><a href="#news">Highlights</a></li>
         <li><a href="#focus">Focus</a></li>
         <li><a href="#work">Work</a></li>
         <li><a href="#experience">Experience</a></li>
@@ -49,6 +50,38 @@
         <a class="button secondary" href="https://github.com/REZ3LIET" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
     </header>
+
+    <section class="section news-section" id="news" aria-labelledby="news-heading">
+      <div class="page-shell">
+        <div class="section-heading single news-heading">
+          <div>
+            <p class="eyebrow">News</p>
+            <h2 id="news-heading">Highlights.</h2>
+          </div>
+        </div>
+
+        <!-- Newest first. To add a highlight, copy one <li class="news-item"> block to the top of this list.
+             Images go in assets/images/news/ (about 1400px wide). Arrows, dots and auto-advance are added by site.js. -->
+        <div class="news-carousel" data-carousel>
+          <ol class="news-track" tabindex="0" aria-label="News highlights" aria-roledescription="carousel">
+            <li class="news-item" aria-roledescription="slide">
+              <article class="detail-card news-card">
+                <a class="news-media" href="https://trace-lab-wpi.github.io/Causality-and-LLM/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+                  <img src="assets/images/news/causality-llm-survey.webp" width="1400" height="800" loading="lazy" alt="">
+                </a>
+                <div class="news-body">
+                  <p class="card-index"><time datetime="2026-10">Oct 2026</time> · arXiv</p>
+                  <h3>Causality and Large Language Models: A Survey of System Design, Capabilities, Trustworthiness, and Applications</h3>
+                  <p>Our survey was published on arXiv. It maps how causality and LLMs meet across system design, capability, trustworthiness, and applications.</p>
+                  <a class="project-card-link" href="https://trace-lab-wpi.github.io/Causality-and-LLM/" target="_blank" rel="noopener noreferrer">View the survey</a>
+                </div>
+              </article>
+            </li>
+          </ol>
+          <div class="carousel-dots" role="group" aria-label="Choose a highlight"></div>
+        </div>
+      </div>
+    </section>
 
     <section class="section" id="focus">
       <div class="page-shell">

@@ -694,9 +694,72 @@
     });
 
     window.addEventListener('resize', () => {
-      if (window.innerWidth > 820) closeMenu();
+      if (window.innerWidth > 1180) closeMenu();
     });
   }
+
+  // Carousels (the News highlights): one slide at a time. With more than one slide this adds
+  // previous/next buttons beside the section heading, dots below, arrow-key support, and
+  // auto-advance every 7s (paused on hover/focus, off for reduced motion). Wraps around.
+  document.querySelectorAll('[data-carousel]').forEach(carousel => {
+    const track = carousel.querySelector('.news-track');
+    const slides = [...track.children];
+    const count = slides.length;
+    slides.forEach((slide, i) => slide.setAttribute('aria-label', `${i + 1} of ${count}`));
+    if (count < 2) return;
+
+    const heading = carousel.closest('section')?.querySelector('.section-heading');
+    const dotsBox = carousel.querySelector('.carousel-dots');
+    const current = () => Math.round(track.scrollLeft / (track.clientWidth || 1));
+    const go = (index, smooth = true) => {
+      const target = (index + count) % count;
+      track.scrollTo({ left: slides[target].offsetLeft - track.offsetLeft, behavior: smooth ? 'smooth' : 'auto' });
+    };
+
+    const controls = document.createElement('div');
+    controls.className = 'scroller-controls';
+    const makeButton = (label, symbol, step) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.setAttribute('aria-label', label);
+      button.textContent = symbol;
+      button.addEventListener('click', () => go(current() + step));
+      return button;
+    };
+    controls.append(makeButton('Previous highlight', '←', -1), makeButton('Next highlight', '→', 1));
+    heading?.append(controls);
+
+    const dots = slides.map((_, i) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.setAttribute('aria-label', `Show highlight ${i + 1}`);
+      dot.addEventListener('click', () => go(i));
+      dotsBox?.append(dot);
+      return dot;
+    });
+    const update = () => {
+      const active = current();
+      dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === active)));
+    };
+    track.addEventListener('scroll', update, { passive: true });
+    track.addEventListener('keydown', event => {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+        event.preventDefault();
+        go(current() + (event.key === 'ArrowRight' ? 1 : -1));
+      }
+    });
+    update();
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let paused = false;
+    ['mouseenter', 'focusin', 'touchstart'].forEach(type => carousel.addEventListener(type, () => { paused = true; }, { passive: true }));
+    ['mouseleave', 'focusout'].forEach(type => carousel.addEventListener(type, () => { paused = false; }));
+    controls.addEventListener('mouseenter', () => { paused = true; });
+    controls.addEventListener('mouseleave', () => { paused = false; });
+    setInterval(() => {
+      if (!paused && !reduceMotion.matches && !document.hidden) go(current() + 1);
+    }, 7000);
+  });
 
   document.querySelectorAll('[data-current-year]').forEach(element => {
     element.textContent = new Date().getFullYear();
