@@ -6,14 +6,14 @@ window.WEBTOONS_DATA = [
     title: 'What Is an Erdős Number?',
     date: '2026-10-21',
     tags: ['Mathematics', 'Graph Theory', 'Networks'],
-    cover: 'episodes/erdos-number/cover.jpg',
-    pdf: 'episodes/1_what_is_an_erdos_number.pdf',
+    cover: '../assets/episodes/erdos-number/cover.jpg',
+    pdf: '../assets/episodes/1_what_is_an_erdos_number.pdf',
     preview: 'A late-night question becomes a visual walk through Erdős numbers, collaboration networks, and shortest-path distance.',
     panels: Array.from({ length: 9 }, (_, index) => {
       const fileName = String(index + 1).padStart(2, '0');
       return {
-        small: `episodes/erdos-number/720/${fileName}.jpg`,
-        large: `episodes/erdos-number/1200/${fileName}.jpg`
+        small: `../assets/episodes/erdos-number/720/${fileName}.jpg`,
+        large: `../assets/episodes/erdos-number/1200/${fileName}.jpg`
       };
     }),
     transcript: [
