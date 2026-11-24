@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Unlisted page: reachable only by its URL. Nothing on the site links here, and search engines are asked to skip it. -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="An interactive map of how metacognition shows up in LLM architecture, reasoning, trustworthiness, applications, and evaluation.">
+  <meta name="theme-color" content="#080b0d">
+  <title>Metacognition Taxonomy — Samar Kale</title>
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <link rel="stylesheet" href="../assets/css/taxonomy.css?v=481e3fc9">
+  <script src="../assets/js/site.js" defer></script>
+  <script src="../assets/js/taxonomy.js?v=6603abc8" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Primary navigation">
+    <div class="nav-shell">
+      <a class="nav-logo" href="../index.html" aria-label="Samar Kale, home">RZL8 <span>/ Samar Kale</span></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-links" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="primary-links">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../index.html#news">Highlights</a></li>
+        <li><a href="../index.html#focus">Focus</a></li>
+        <li><a href="../index.html#work">Work</a></li>
+        <li><a href="experience.html">Experience</a></li>
+        <li><a href="musings.html">Musings</a></li>
+        <li><a href="../index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main-content">
+    <header class="page-hero page-shell taxonomy-hero">
+      <a class="breadcrumb" href="../index.html">← Home</a>
+      <p class="eyebrow">Taxonomy</p>
+      <h1>Metacognition <span class="accent">in LLMs.</span></h1>
+      <p class="lead">Where models monitor, judge, and steer their own thinking, organised by area. Open a branch to grow the map, then pick a topic to see the problem it tackles and the paper behind it.</p>
+      <p class="taxonomy-stats" id="taxonomy-stats" aria-live="polite"></p>
+    </header>
+
+    <section class="page-shell taxonomy-app" aria-label="Taxonomy explorer">
+      <div class="explorer" id="explorer">
+        <div class="explorer-bar">
+          <label class="topic-search">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" /></svg>
+            <span class="visually-hidden">Search the taxonomy</span>
+            <input id="topic-search" type="search" placeholder="Search taxonomy" autocomplete="off">
+            <kbd>/</kbd>
+          </label>
+          <p class="visible-topics"><span id="visible-topics">0</span> visible topics</p>
+          <div class="map-actions">
+            <button id="all-papers" type="button">All papers</button>
+            <button id="toggle-all" type="button">Expand all</button>
+            <span class="tool-divider" aria-hidden="true"></span>
+            <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
+            <button id="fit-map" type="button">Fit</button>
+            <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
+            <span class="tool-divider" aria-hidden="true"></span>
+            <button id="fullscreen" class="fullscreen-toggle" type="button" aria-pressed="false" title="Fullscreen (F)">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path class="fs-enter" d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /><path class="fs-exit" d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" /></svg>
+              <span class="fs-label">Fullscreen</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="mindmap-shell">
+          <div id="mindmap-viewport" class="mindmap-viewport" aria-label="Taxonomy mind map">
+            <div id="mindmap-sizer" class="mindmap-sizer">
+              <div id="mindmap-canvas" class="mindmap-canvas">
+                <svg id="mindmap-edges" class="mindmap-edges" aria-hidden="true"></svg>
+                <div id="mindmap-nodes" class="mindmap-nodes" role="tree" aria-label="Metacognition taxonomy"></div>
+              </div>
+            </div>
+            <p id="topic-empty" class="map-empty" hidden>No matching topics.</p>
+            <p class="pan-hint"><span aria-hidden="true">↔</span> Drag to pan · Click a topic to open it</p>
+          </div>
+
+          <aside id="topic-drawer" class="topic-drawer" aria-live="polite" aria-labelledby="selected-title" hidden>
+            <button id="close-drawer" class="drawer-close" type="button" aria-label="Close details">×</button>
+            <div class="drawer-heading">
+              <nav id="breadcrumbs" class="drawer-crumbs" aria-label="Breadcrumb"></nav>
+              <h2 id="selected-title" tabindex="-1"></h2>
+              <p id="selected-meta"></p>
+              <button id="copy-link" class="copy-link" type="button">Copy section link</button>
+            </div>
+            <div id="drawer-body" class="drawer-body"></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>© <span data-current-year>2026</span> Samar Kale</span>
+    <span>Metacognition · LLM reasoning · Trustworthiness</span>
+  </footer>
+</body>
+</html>

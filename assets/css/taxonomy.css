@@ -1,0 +1,797 @@
+/* Metacognition taxonomy mind map (pages/metacognition-taxonomy.html), modelled on the
+   Causality-and-LLM survey site's explorer. Colours come from the site theme variables, so every
+   season and Day/Night mode applies. Each area gets a hue (--hue, set by taxonomy.js). */
+
+:root {
+  --tone-l: 62%;
+}
+
+/* Light (day) backgrounds need darker accents to stay readable. */
+:root[data-mode='day'] {
+  --tone-l: 42%;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.taxonomy-hero {
+  padding-bottom: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.taxonomy-stats {
+  margin: 1.2rem 0 0;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.taxonomy-app {
+  padding-bottom: clamp(4rem, 8vw, 6rem);
+}
+
+/* ---- explorer frame + toolbar ---- */
+.explorer {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.explorer-bar {
+  display: grid;
+  grid-template-columns: minmax(220px, 350px) 1fr auto;
+  align-items: center;
+  gap: 1.4rem;
+  min-height: 62px;
+  padding: 0.6rem 0.9rem 0.6rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+.topic-search {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--border-strong);
+  color: var(--text-muted);
+}
+
+.topic-search:focus-within {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.topic-search svg {
+  width: 16px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+}
+
+.topic-search input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.topic-search input::placeholder {
+  color: var(--text-muted);
+}
+
+.topic-search kbd {
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+}
+
+.visible-topics {
+  margin: 0;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.map-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.map-actions button {
+  min-width: 34px;
+  height: 32px;
+  padding: 0 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text-soft);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.map-actions button:hover,
+.map-actions button:focus-visible {
+  border-color: var(--text);
+  outline: 0;
+  background: var(--text);
+  color: var(--bg);
+}
+
+.tool-divider {
+  width: 1px;
+  height: 22px;
+  margin: 0 0.25rem;
+  background: var(--border);
+}
+
+/* ---- map canvas ---- */
+.mindmap-shell {
+  position: relative;
+  overflow: hidden;
+}
+
+.mindmap-viewport {
+  --grid: color-mix(in srgb, var(--text) 4%, transparent);
+  --dot: color-mix(in srgb, var(--text) 14%, transparent);
+  position: relative;
+  height: min(690px, 75vh);
+  overflow: auto;
+  overscroll-behavior: contain;
+  cursor: grab;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+    radial-gradient(circle, var(--dot) 1px, transparent 1.2px);
+  background-size: 88px 88px, 88px 88px, 22px 22px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+.mindmap-viewport.is-panning {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.mindmap-sizer {
+  position: relative;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.mindmap-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+
+.mindmap-edges {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.mindmap-edges path {
+  fill: none;
+  stroke: color-mix(in srgb, hsl(var(--hue) 60% var(--tone-l)) 70%, var(--text-muted));
+  stroke-width: 1.3;
+  vector-effect: non-scaling-stroke;
+}
+
+.mindmap-edges path.depth-0 {
+  stroke: var(--text-soft);
+  stroke-width: 1.8;
+}
+
+.mindmap-nodes {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---- nodes ---- */
+.mind-node {
+  --tone: hsl(var(--hue) 65% var(--tone-l));
+  position: absolute;
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0.6rem 2rem 0.6rem 0.75rem;
+  border: 1px solid var(--tone);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--tone) 12%, var(--surface));
+  color: var(--text);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transform: translateY(-50%);
+  transition: box-shadow 150ms ease, transform 150ms ease, background 150ms ease;
+}
+
+.mind-node:hover,
+.mind-node:focus-visible {
+  z-index: 2;
+  outline: 0;
+  border-color: var(--text);
+  box-shadow: 4px 4px 0 var(--text);
+  transform: translateY(-50%) translate(-2px, -2px);
+}
+
+.mind-node.is-match {
+  box-shadow: 0 0 0 2px var(--warm);
+  background: color-mix(in srgb, var(--warm) 22%, var(--surface));
+}
+
+.mind-node.is-selected {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--bg);
+}
+
+.mind-node.root-node {
+  min-height: 68px;
+  padding: 0.8rem 2.4rem 0.8rem 0.95rem;
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--bg);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+}
+
+.mind-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.32;
+}
+
+.root-node .mind-label {
+  font-size: 0.9rem;
+}
+
+.mind-count {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.root-node .mind-count,
+.is-selected .mind-count {
+  color: color-mix(in srgb, var(--bg) 70%, var(--text));
+}
+
+.mind-toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.72rem;
+  line-height: 1;
+  transform: translateY(-50%);
+  transition: transform 150ms ease;
+}
+
+.mind-node[aria-expanded='true'] .mind-toggle {
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.mind-leaf-arrow {
+  position: absolute;
+  top: 50%;
+  right: 9px;
+  color: var(--tone);
+  font-size: 0.82rem;
+  transform: translateY(-50%);
+}
+
+.is-selected .mind-leaf-arrow {
+  color: inherit;
+}
+
+.pan-hint {
+  position: sticky;
+  bottom: 12px;
+  left: 16px;
+  width: max-content;
+  margin: 0;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(7px);
+  color: var(--text-muted);
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.pan-hint span {
+  margin-right: 0.3rem;
+  color: var(--text);
+}
+
+.map-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.map-empty[hidden] {
+  display: none;
+}
+
+/* ---- details drawer ---- */
+.topic-drawer {
+  --tone: hsl(var(--hue, 195) 65% var(--tone-l));
+  position: absolute;
+  z-index: 8;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(480px, 54%);
+  overflow: auto;
+  padding: 3rem 2rem 2rem;
+  border-left: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: -18px 0 45px rgba(0, 0, 0, 0.18);
+  animation: drawer-in 220ms ease;
+}
+
+.topic-drawer[hidden] {
+  display: none;
+}
+
+@keyframes drawer-in {
+  from { opacity: 0; transform: translateX(24px); }
+}
+
+.drawer-close {
+  position: absolute;
+  top: 15px;
+  right: 16px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--text);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.drawer-close:hover,
+.drawer-close:focus-visible {
+  outline: 0;
+  background: var(--text);
+  color: var(--bg);
+}
+
+.drawer-heading {
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--text);
+}
+
+.drawer-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.drawer-crumbs span:not(:last-child)::after {
+  content: ' /';
+  color: var(--text-soft);
+}
+
+.drawer-heading h2 {
+  margin: 0.7rem 0 0.45rem;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  line-height: 1.15;
+}
+
+.drawer-heading h2:focus {
+  outline: none;
+}
+
+.drawer-heading p {
+  margin: 0;
+  color: var(--tone);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.copy-link {
+  margin-top: 1rem;
+  padding: 0.4rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--text);
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.copy-link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.drawer-body section {
+  padding: 1.3rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.drawer-body section:last-child {
+  border-bottom: 0;
+}
+
+.drawer-kicker {
+  margin: 0 0 0.9rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.leaf-path {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.leaf-path li {
+  position: relative;
+  padding: 0 0 0.8rem 1.4rem;
+  color: var(--text-soft);
+  font-size: 0.92rem;
+}
+
+.leaf-path li::before {
+  content: '';
+  position: absolute;
+  top: 0.45em;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--tone);
+  border-radius: 50%;
+  background: var(--surface);
+}
+
+.leaf-path li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: calc(0.45em + 13px);
+  bottom: 2px;
+  left: 6px;
+  width: 1px;
+  background: var(--border-strong);
+}
+
+.leaf-path li.here {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.leaf-path li.here::before {
+  background: var(--tone);
+}
+
+.leaf-path button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.leaf-path button:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.sibling-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sibling-list button {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.7rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.sibling-list li:last-child button {
+  border-bottom: 0;
+}
+
+.sibling-list button:hover {
+  color: var(--accent);
+}
+
+.sibling-meta {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+}
+
+/* ---- fullscreen ---- */
+.fullscreen-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.fullscreen-toggle svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fullscreen-toggle .fs-exit,
+.is-fullscreen .fullscreen-toggle .fs-enter {
+  display: none;
+}
+
+.is-fullscreen .fullscreen-toggle .fs-exit {
+  display: inline;
+}
+
+/* The explorer fills the screen: toolbar on top, map takes the rest. */
+.explorer.is-fullscreen {
+  position: fixed;
+  z-index: 5000;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.explorer.is-fullscreen .mindmap-shell {
+  flex: 1;
+  min-height: 0;
+}
+
+.explorer.is-fullscreen .mindmap-viewport {
+  height: 100%;
+}
+
+.explorer:fullscreen {
+  width: 100%;
+  height: 100%;
+  background: var(--surface);
+}
+
+.explorer::backdrop {
+  background: var(--bg);
+}
+
+/* Page behind the fallback (CSS-only) fullscreen shouldn't scroll. */
+html.taxonomy-fullscreen,
+html.taxonomy-fullscreen body {
+  overflow: hidden;
+}
+
+/* <main> is its own stacking layer (z-index 1, under the site nav), so lift it while the explorer
+   covers the window, and hide the nav/footer so nothing shows through. */
+html.taxonomy-fullscreen main {
+  z-index: 6000;
+}
+
+html.taxonomy-fullscreen .site-nav,
+html.taxonomy-fullscreen .site-footer {
+  visibility: hidden;
+}
+
+/* problem statement + papers */
+.note-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--text-soft);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.note-list li + li {
+  margin-top: 0.35rem;
+}
+
+.problem-text {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.paper-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.8rem;
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.paper-card:first-child {
+  padding-top: 0;
+}
+
+.paper-card:last-child {
+  border-bottom: 0;
+}
+
+.paper-card > div:only-child {
+  grid-column: 1 / -1;
+}
+
+.paper-number {
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  line-height: 1.9;
+}
+
+.paper-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.paper-title a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--border-strong);
+  text-underline-offset: 4px;
+}
+
+.paper-title a::after {
+  content: ' ↗';
+  color: var(--tone);
+  font-size: 0.85em;
+}
+
+.paper-title a:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+
+.paper-meta {
+  margin: 0;
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+.paper-topic {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.paper-topic:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.copy-link[hidden] {
+  display: none;
+}
+
+/* ---- small screens ---- */
+@media (max-width: 760px) {
+  .explorer-bar {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    padding: 0.85rem;
+  }
+
+  .visible-topics,
+  .topic-search kbd {
+    display: none;
+  }
+
+  .map-actions {
+    flex-wrap: wrap;
+  }
+
+  .mindmap-viewport {
+    height: 70vh;
+  }
+
+  .topic-drawer {
+    width: 100%;
+    padding: 3rem 1.25rem 1.75rem;
+    border-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mind-node,
+  .mind-toggle {
+    transition: none;
+  }
+
+  .topic-drawer {
+    animation: none;
+  }
+}
